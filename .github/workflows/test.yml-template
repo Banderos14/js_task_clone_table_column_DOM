@@ -20,8 +20,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-      - run: npm start > /tmp/mate-start.log 2>&1 &
-      - run: timeout 60s bash -lc 'until curl -sSf http://localhost:3000 >/dev/null; do sleep 1; done'
+      - run: |
+          nohup npm start > /tmp/mate-start.log 2>&1 &
+          timeout 60s bash -lc 'until curl -sSf http://localhost:3000 >/dev/null; do sleep 1; done'
       - run: npm test
       - name: Upload tests report(cypress mochaawesome merged HTML report)
         if: ${{ always() }}
